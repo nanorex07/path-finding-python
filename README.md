@@ -6,12 +6,13 @@ Uses svg to write images
 ## Todos
 - [x] A maze class
 - [x] A maze to text file
-- [ ] A maze generator
+- [x] A maze generator
 - [ ] A text file to svg writer
 - [ ] Implement Solving Algorithms
 -----------------------------
 
 ## Guide to text files
+These symbols can be changed from `setting.py` file
 ```
 # : Blocked Node
 . : Walkable Node

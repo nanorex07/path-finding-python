@@ -1,24 +1,54 @@
+from symbols import *
 
 class Node:
     '''Node class to store info about a node'''
-    def __init__(self, symbol='.'):
+    def __init__(self, r, c, symbol=WALKABLE, wall=False):
         self.neighbors = []
         self.symbol = symbol
         self.parent = None
-
+        self.visited = False
+        self.wall = wall
+        self.r = r
+        self.c = c
     def __str__(self):
         return f'''
             "{self.symbol}" -> {len(self.neighbors)}
         '''
-
+    def addNeighbor(self, n):
+        self.neighbors.append(n)
 
 class Maze:
     '''Maze class to generate and blit maze'''
     def __init__(self, rows, cols):
         self.rows = rows
         self.cols = cols
-        self.maze = [[Node() for _ in range(0, cols)] for _ in range(0, rows)]
-        self.symbols = ['S', 'E', '.', '*', '#']
+        self.maze = []
+        self.create()
+
+    def create(self):
+        for r in range(0, self.rows):
+            temp = []
+            if r%2==0:
+                for c in range(0, self.cols):
+                    temp.append(Node(r,c,WALL, True))
+                self.maze.append(temp)
+            else:
+                for c in range(0, self.cols):
+                    if c%2==0:
+                        temp.append(Node(r,c,WALL, True))
+                    else:
+                        temp.append(Node(r,c))
+                self.maze.append(temp)
+
+    def process_walls(self):
+        for r in range(0, self.rows):
+            for c in range(0, self.cols):
+                if self.maze[r][c].wall:
+                    dx = [-1,1,0,0]
+                    dy = [0,0,1,-1]
+                    for x in range(0, 4):
+                        if (r+dx[x] >= 0 and r+dx[x] < self.rows) and (c+dy[x] >= 0 and c+dy[x] < self.cols) and not self.maze[r+dx[x]][c+dy[x]].wall:
+                            self.maze[r][c].addNeighbor(self.maze[r+dx[x]][c+dy[x]])
 
     def __str__(self):
         res = ""
@@ -40,6 +70,7 @@ class Maze:
                 f.write(temp+'\n')
         f.close()
 
+    @classmethod
     def load_from_file(self, filename):
         try:
             f = open(filename, 'r')
@@ -49,14 +80,14 @@ class Maze:
         
         lines = f.readlines()
         f.close()
-        self.maze = []
-        self.rows = len(lines)
-        self.cols = len(lines[0]) - 1
-        for i in range(0, self.rows):
-            row = []
-            for j in range(0, self.cols):
-                if(lines[i][j] not in self.symbols):
+        rows = len(lines)
+        cols = len(lines[0]) - 1
+        m = Maze(rows, cols)
+        for i in range(0, rows):
+            for j in range(0, cols):
+                if(lines[i][j] not in ALL_LIST):
                     raise Exception("Invalid symbol found in file, exiting.")
                     quit()
-                row.append(Node(lines[i][j]))
-            self.maze.append(row)
+                m.maze[i][j] = Node(i,j,lines[i][j], True if lines[i][j] == WALL else False)
+        return m
+

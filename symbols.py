@@ -1,0 +1,6 @@
+START = "S"
+END = "E"
+WALKABLE = "."
+WALL = "#"
+PATH = "@"
+ALL_LIST = [START, END, WALKABLE, WALL, PATH]
