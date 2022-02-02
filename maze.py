@@ -40,10 +40,21 @@ class Maze:
                         temp.append(Node(r,c))
                 self.maze.append(temp)
 
+    '''Only called in Generator'''
     def process_walls(self):
         for r in range(0, self.rows):
             for c in range(0, self.cols):
                 if self.maze[r][c].wall:
+                    dx = [-1,1,0,0]
+                    dy = [0,0,1,-1]
+                    for x in range(0, 4):
+                        if (r+dx[x] >= 0 and r+dx[x] < self.rows) and (c+dy[x] >= 0 and c+dy[x] < self.cols) and not self.maze[r+dx[x]][c+dy[x]].wall:
+                            self.maze[r][c].addNeighbor(self.maze[r+dx[x]][c+dy[x]])
+
+    def process_nodes(self):
+        for r in range(0, self.rows):
+            for c in range(0, self.cols):
+                if not self.maze[r][c].wall:
                     dx = [-1,1,0,0]
                     dy = [0,0,1,-1]
                     for x in range(0, 4):

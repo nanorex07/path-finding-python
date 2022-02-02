@@ -7,8 +7,11 @@ Uses svg to write images
 - [x] A maze class
 - [x] A maze to text file
 - [x] A maze generator
-- [ ] A text file to svg writer
-- [ ] Implement Solving Algorithms
+- [x] A text file to svg writer
+- [x] DFS
+- [ ] BFS
+- [ ] Greedy BFS
+- [ ] A*
 -----------------------------
 
 ## Guide to text files
