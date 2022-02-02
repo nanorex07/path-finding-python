@@ -91,3 +91,17 @@ class Maze:
                 m.maze[i][j] = Node(i,j,lines[i][j], True if lines[i][j] == WALL else False)
         return m
 
+    def write_to_svg(self, filename):
+        f = open(filename, 'w')
+        w = self.cols * SVG_RECT_SIZE
+        h = self.rows * SVG_RECT_SIZE
+        f.write(f'<svg width="{w}" height="{h}">')
+        y = 0
+        for i in range(self.rows):
+            x = 0
+            for j in range(self.cols):
+                f.write(f'<rect x="{x}" y="{y}" width="{SVG_RECT_SIZE}" height="{SVG_RECT_SIZE}" style="fill:{COLORS[self.maze[i][j].symbol]};stroke:{SVG_BORDER_COL};stroke-width:{SVG_STROKE_WIDTH};" />')
+                x += SVG_RECT_SIZE
+            y += SVG_RECT_SIZE
+        f.write(f'</svg>')
+        f.close()
