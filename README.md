@@ -12,7 +12,7 @@ Uses svg to write images
 -----------------------------
 
 ## Guide to text files
-These symbols can be changed from `setting.py` file
+These symbols can be changed from `symbols.py` file
 ```
 # : Blocked Node
 . : Walkable Node
