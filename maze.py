@@ -26,6 +26,7 @@ class Maze:
         self.maze = []
         self.create()
 
+    ''' Create the random maze '''    
     def create(self):
         for r in range(0, self.rows):
             temp = []
@@ -52,6 +53,7 @@ class Maze:
                         if (r+dx[x] >= 0 and r+dx[x] < self.rows) and (c+dy[x] >= 0 and c+dy[x] < self.cols) and not self.maze[r+dx[x]][c+dy[x]].wall:
                             self.maze[r][c].addNeighbor(self.maze[r+dx[x]][c+dy[x]])
 
+    ''' Only called in Solver '''
     def process_nodes(self):
         for r in range(0, self.rows):
             for c in range(0, self.cols):
@@ -62,6 +64,7 @@ class Maze:
                         if (r+dx[x] >= 0 and r+dx[x] < self.rows) and (c+dy[x] >= 0 and c+dy[x] < self.cols) and not self.maze[r+dx[x]][c+dy[x]].wall:
                             self.maze[r][c].addNeighbor(self.maze[r+dx[x]][c+dy[x]])
 
+    '''utility to print the maze'''
     def __str__(self):
         res = ""
         for i in self.maze:
@@ -69,7 +72,8 @@ class Maze:
                 res += j.symbol
             res += "\n"
         return res
-    
+
+    ''' Write to text file '''    
     def write_to_file(self, filename):
         f = open(filename, 'w')
         for i in range(0, self.rows):
@@ -82,6 +86,7 @@ class Maze:
                 f.write(temp+'\n')
         f.close()
 
+    ''' Reads a maze file and generate maze over it '''
     @classmethod
     def load_from_file(self, filename):
         try:
@@ -103,6 +108,7 @@ class Maze:
                 m.maze[i][j] = Node(i,j,lines[i][j], True if lines[i][j] == WALL else False)
         return m
 
+    ''' Dump maze to svg '''
     def write_to_svg(self, filename, show_visit=False, endCor=[-1,-1]):
         f = open(filename, 'w')
         w = self.cols * SVG_RECT_SIZE

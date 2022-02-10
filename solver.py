@@ -9,8 +9,10 @@ class Solver:
         self.er = -1
         self.ec = -1
         self.maze.process_nodes()
+        self.path = None
         self.init_poses()
 
+    # Find the start and end coor from maze
     def init_poses(self):
         for i in range(0, self.maze.rows):
             for j in range(0, self.maze.cols):
@@ -36,6 +38,7 @@ class Solver:
                     stack.append(i)
         self.trace_path()
 
+    # Calculate manhattan dist between 2 nodes
     def _manhattan_dist(self,n1, n2):
         return abs(n1.r-n2.r) + abs(n1.c - n2.c) 
 
@@ -82,9 +85,11 @@ class Solver:
             closed.append(q)
         self.trace_path()
                 
-
+    # Construct the path
     def trace_path(self):
         node = self.maze.maze[self.er][self.ec].parent
+        self.path = 1
         while node.parent:
+            self.path += 1
             node.symbol = PATH
             node = node.parent

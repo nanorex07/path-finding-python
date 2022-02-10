@@ -11,7 +11,9 @@ Uses svg to write images
 - [x] DFS
 - [x] BFS
 - [x] A*
-- [ ] Wrap up by the interface
+- [x] Wrap up by the interface
+- [ ] Add Weight's to nodes
+- [ ] Weighted algorithms 
 -----------------------------
 
 ## Guide to text files
@@ -30,11 +32,15 @@ E : Ending Node
 Generator
 
 ```bash
+python3 maze_gen.py -h
 python3 maze_gen.py
 ```
 
 Path Finder
 
 ```bash
+python3 solve.py -h
 python3 solve.py maze.txt
 ```
+
+-----------------------------

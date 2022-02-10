@@ -2,11 +2,13 @@ from symbols import *
 import random
 
 class Generator:
+    '''Generates a random maze'''
     def __init__(self, maze):
         self.maze = maze
         self.walls_list = []
         self.neighbors = []
 
+    '''Appends walls of a node to walls list'''
     def add_walls(self,r,c):
         dx = [-1,1,0,0]
         dy = [0,0,1,-1]
@@ -14,6 +16,7 @@ class Generator:
             if (r+dx[x] >= 0 and r+dx[x] < self.maze.rows) and (c+dy[x] >= 0 and c+dy[x] < self.maze.cols):
                 self.walls_list.append(self.maze.maze[r+dx[x]][c+dy[x]])
 
+    '''Get the list of neighbors'''
     def get_neighbors(self,r,c):
         self.neighbors = []
         dx = [-2,2,0,0]
