@@ -1,4 +1,6 @@
+import imp
 from symbols import *
+import math
 
 class Node:
     '''Node class to store info about a node'''
@@ -10,10 +12,9 @@ class Node:
         self.wall = wall
         self.r = r
         self.c = c
-    def __str__(self):
-        return f'''
-            "{self.symbol}" -> {len(self.neighbors)}
-        '''
+        self.g = None
+    def __lt__(self, other):
+        return False
     def addNeighbor(self, n):
         self.neighbors.append(n)
 
@@ -102,16 +103,28 @@ class Maze:
                 m.maze[i][j] = Node(i,j,lines[i][j], True if lines[i][j] == WALL else False)
         return m
 
-    def write_to_svg(self, filename):
+    def write_to_svg(self, filename, show_visit=False, endCor=[-1,-1]):
         f = open(filename, 'w')
         w = self.cols * SVG_RECT_SIZE
         h = self.rows * SVG_RECT_SIZE
-        f.write(f'<svg width="{w}" height="{h}">')
+        f.write('<?xml version="1.0" encoding="utf-8"?>')
+
+        f.write(f'<svg version="1.1" width="{w}" height="{h}">')
+        
         y = 0
         for i in range(self.rows):
             x = 0
             for j in range(self.cols):
-                f.write(f'<rect x="{x}" y="{y}" width="{SVG_RECT_SIZE}" height="{SVG_RECT_SIZE}" style="fill:{COLORS[self.maze[i][j].symbol]};stroke:{SVG_BORDER_COL};stroke-width:{SVG_STROKE_WIDTH};" />')
+
+                if self.maze[i][j].symbol == WALKABLE and (self.maze[i][j].g or self.maze[i][j].visited) and show_visit:
+                    f.write(f'<rect x="{x}" y="{y}" width="{SVG_RECT_SIZE}" height="{SVG_RECT_SIZE}" style="fill:{VISITED_CELL_COL};stroke:{SVG_BORDER_COL};stroke-width:{SVG_STROKE_WIDTH};" />')
+                else:
+                    f.write(f'<rect x="{x}" y="{y}" width="{SVG_RECT_SIZE}" height="{SVG_RECT_SIZE}" style="fill:{COLORS[self.maze[i][j].symbol]};stroke:{SVG_BORDER_COL};stroke-width:{SVG_STROKE_WIDTH};" />')
+
+                if self.maze[i][j].g and show_visit:
+                    sz = 1 - math.floor(math.log(self.maze[i][j].g, 10))/10
+                    f.write(f'<text x="{x+SVG_STROKE_WIDTH}" y="{y + (SVG_RECT_SIZE+SVG_STROKE_WIDTH)/2}" fill="white" style="font: bold {sz}em sans-serif;">{self.maze[i][j].g + abs(i-endCor[0]) + abs(j - endCor[1]) }</text>')
+
                 x += SVG_RECT_SIZE
             y += SVG_RECT_SIZE
         f.write(f'</svg>')

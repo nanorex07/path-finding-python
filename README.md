@@ -9,9 +9,9 @@ Uses svg to write images
 - [x] A maze generator
 - [x] A text file to svg writer
 - [x] DFS
-- [ ] BFS
-- [ ] Greedy BFS
-- [ ] A*
+- [x] BFS
+- [x] A*
+- [ ] Wrap up by the interface
 -----------------------------
 
 ## Guide to text files

@@ -1,15 +1,30 @@
 from symbols import *
+import heapq
 
 class Solver:
     def __init__(self, maze):
         self.maze = maze
+        self.sr = -1
+        self.sc = -1
+        self.er = -1
+        self.ec = -1
         self.maze.process_nodes()
+        self.init_poses()
+
+    def init_poses(self):
+        for i in range(0, self.maze.rows):
+            for j in range(0, self.maze.cols):
+                if self.maze.maze[i][j].symbol == START:
+                    self.sr = i
+                    self.sc = j
+                if self.maze.maze[i][j].symbol == END:
+                    self.ec = j
+                    self.er = i
 
     def _dfs(self):
         stack = []
-        r,c = 1,1
-        self.maze.maze[r][c].visited = True
-        stack.append(self.maze.maze[r][c])
+        self.maze.maze[self.sr][self.sc].visited = True
+        stack.append(self.maze.maze[self.sr][self.sc])
         while len(stack) > 0:
             ne = stack.pop()
             ne.visited = True
@@ -21,11 +36,55 @@ class Solver:
                     stack.append(i)
         self.trace_path()
 
+    def _manhattan_dist(self,n1, n2):
+        return abs(n1.r-n2.r) + abs(n1.c - n2.c) 
+
+    def _bfs(self):
+        self.maze.maze[self.sr][self.sc].visited = True
+        queue = [self.maze.maze[self.sr][self.sc]]
+        while len(queue) > 0:
+            ne = queue.pop(0)
+            if ne.symbol == END:
+                break
+            for i in ne.neighbors:
+                if not i.visited:
+                    i.parent = ne
+                    i.visited = True
+                    queue.append(i)
+        self.trace_path()
+
+    def _a_star(self):
+        open = []
+        closed = []
+        heapq.heappush(open, (0, self.maze.maze[self.sr][self.sc]))
+        open[0][1].g = 0
+        while len(open) > 0:
+            q = heapq.heappop(open)
+            for i in q[1].neighbors:
+                i.g = 1 + q[1].g
+                if i.symbol == END:
+                    i.parent = q[1]
+                    self.trace_path()
+                    return
+                fcost = i.g + self._manhattan_dist(i, self.maze.maze[self.er][self.ec])
+
+                skip = False
+
+                for n in open+closed:
+                    if i == n[1] and n[0] < fcost:
+                        skip = True 
+                        break
+                if skip:
+                    continue
+                i.parent = q[1]
+                heapq.heappush(open,(fcost, i))
+
+            closed.append(q)
+        self.trace_path()
+                
+
     def trace_path(self):
-        r = self.maze.rows-1
-        c = self.maze.cols-1
-        node = self.maze.maze[r][c].parent
+        node = self.maze.maze[self.er][self.ec].parent
         while node.parent:
             node.symbol = PATH
             node = node.parent
-

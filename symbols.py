@@ -7,15 +7,16 @@ PATH = "@"
 ALL_LIST = [START, END, WALKABLE, WALL, PATH]
 
 #SVG Colors
-# "https://coolors.co/3c3744-090c9b-3066be-b4c5e4-fbfff1"
+# https://www.color-hex.com/color-palette/36646
 COLORS = {
-    START: "#FBFFF1",
-    END : "#090C9B",
-    WALKABLE: "#B4C5E4",
-    WALL: "#3C3744",
-    PATH: "#3066BE",
+    START: "#770ad2",
+    END : "#0b76d7",
+    WALKABLE: "#7c818c",
+    WALL: "#383c4a",
+    PATH: "#5294e2",
 }
-SVG_BORDER_COL = "#FBFFF1"
+VISITED_CELL_COL = "#444b5c"
+SVG_BORDER_COL = "#404552"
 #Other
 SVG_RECT_SIZE = 30
 SVG_STROKE_WIDTH = 5
